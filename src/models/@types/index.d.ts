@@ -64,6 +64,8 @@ export type NewRecipientDocument = {
   isRead: boolean
 }
 
+export type RecipientDocument = NewRecipientDocument & mongoose.Document
+
 export type NewDeviceDocument = {
   deviceId: string
   senderId: string

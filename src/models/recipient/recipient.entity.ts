@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
-import { recipientDocument } from '../@types';
+import mongoose, { Schema } from 'mongoose'
 
+import { RecipientDocument } from '../@types'
 
 const recipientSchema = new Schema(
   {
@@ -21,6 +21,6 @@ const recipientSchema = new Schema(
 )
 
 export const Upload = mongoose.model<
-  recipientDocument,
-  mongoose.PaginateModel<recipientDocument>
+  RecipientDocument,
+  mongoose.PaginateModel<RecipientDocument>
 >('Recipient', recipientSchema, 'recipient')
