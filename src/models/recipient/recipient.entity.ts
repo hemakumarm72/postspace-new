@@ -23,4 +23,4 @@ const recipientSchema = new Schema(
 export const Upload = mongoose.model<
   RecipientDocument,
   mongoose.PaginateModel<RecipientDocument>
->('Recipient', recipientSchema, 'recipient')
+>('Recipient', recipientSchema, 'recipients')

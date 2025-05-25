@@ -193,7 +193,7 @@ export const VALIDATION_VERIFY_PIN = (where: Location): ParamSchema => ({
           fieldName: 'userId',
           value: user.userId,
           updateData: {
-            $inc: { loginFailureCount: 1 },
+            $inc: { attemptFailedCount: 1 },
             $set: { blockUntil: new Date(getAddToCurrentTime(1, 'h')) },
           },
         }

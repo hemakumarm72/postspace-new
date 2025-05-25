@@ -14,7 +14,7 @@ const fileSchema = new Schema(
   { versionKey: false, timestamps: true },
 )
 
-export const File = mongoose.model<FileDocument, mongoose.PaginateModel<FileDocument>>(
+export const Files = mongoose.model<FileDocument, mongoose.PaginateModel<FileDocument>>(
   'File',
   fileSchema,
   'files',
