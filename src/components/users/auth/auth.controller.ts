@@ -8,6 +8,7 @@ import {
 } from '../../../models/@types'
 import { otpModel } from '../../../models/otp'
 import { userModel } from '../../../models/user'
+import { badImplementationException } from '../../../utils/apiErrorHandler'
 import { hashPin } from '../../../utils/crypto'
 import { getAddToCurrentTime } from '../../../utils/day'
 import { encodeJwt } from '../../../utils/jwt'
@@ -189,3 +190,39 @@ export const pinVerify = async (
 }
 
 export const pinReset = async () => {}
+
+export const refresh = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.user
+    if (!userId)
+      throw badImplementationException(
+        'authorization process has something wrong.',
+      )
+    const { ACCESS_TOKEN_EXPIRED_IN, REFRESH_TOKEN_EXPIRED_IN } = process.env
+
+    const browserToken = generatedId()
+    const accessToken = encodeJwt(
+      { id: userId, browserToken },
+      ACCESS_TOKEN_EXPIRED_IN || '5m',
+      'access',
+    )
+    const refreshToken = encodeJwt(
+      { id: userId, browserToken },
+      REFRESH_TOKEN_EXPIRED_IN || '30d',
+      'refresh',
+    )
+
+    await userModel.update({
+      fieldName: 'userId',
+      value: userId,
+      updateData: { refreshToken },
+    })
+    return handleResponse(res, 200, { accessToken, refreshToken })
+  } catch (err: any) {
+    next(err)
+  }
+}
