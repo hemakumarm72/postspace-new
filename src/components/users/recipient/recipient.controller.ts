@@ -54,7 +54,7 @@ export const updateRecipients = async (
     await recipientModel.update({
       fieldName: 'recipientId',
       value: recipientId,
-      updateData: name,
+      updateData: { name },
     })
 
     return handleResponse(res, 200, {})
