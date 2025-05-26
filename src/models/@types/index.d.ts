@@ -1,4 +1,5 @@
 import mongoose, { SortOrder, UpdateQuery } from 'mongoose'
+import { StringifyOptions } from 'querystring'
 
 export type UpdateType<T> = {
   fieldName: keyof T
@@ -52,16 +53,11 @@ export type NewUploadDocument = {
 export type UploadDocument = NewUploadDocument & mongoose.Document
 
 export type NewRecipientDocument = {
-  senderId: string
   recipientId: string
-  filename: string
-  path: string
-  filesize: number
-  mimeType: string
-  uploadKey: Buffer
-  iv: Buffer
-  tag: Buffer
-  isRead: boolean
+  userId: string
+  name: string
+  email: string | null
+  isPaused: boolean
 }
 
 export type RecipientDocument = NewRecipientDocument & mongoose.Document

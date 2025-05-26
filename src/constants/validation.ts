@@ -2,6 +2,7 @@ import { Location, ParamSchema } from 'express-validator'
 
 import { UpdateType, UserDocument } from '../models/@types'
 import { otpModel } from '../models/otp'
+import { recipientModel } from '../models/recipient'
 import { userModel } from '../models/user'
 import { comparePass } from '../utils/bcrypt'
 import { hashVerify } from '../utils/crypto'
@@ -267,6 +268,20 @@ export const VALIDATION_OTP_CODE = (
         userId: otpCode.userId,
         otpId: otpCode.otpId,
       }
+      return true
+    },
+  },
+})
+
+export const VALIDATION_RECIPIENT_ID = (where: Location): ParamSchema => ({
+  in: [where],
+  isString: true,
+  notEmpty: true,
+  custom: {
+    options: async (value, { req, location, path }) => {
+      const get = await recipientModel.getByFieldAndValue('recipientId', value)
+      if (!get) throw Error('4015') // TODO: recipient not found
+
       return true
     },
   },

@@ -4,23 +4,19 @@ import { RecipientDocument } from '../@types'
 
 const recipientSchema = new Schema(
   {
-    senderId: { type: String },
-    recipientId: {
+    recipientId: { type: String },
+    userId: { type: String },
+    name: {
       type: String,
+      required: true,
     },
-    filename: { type: String, required: true },
-    path: { type: String, required: true },
-    filesize: { type: Number },
-    mimeType: { type: String, required: true },
-    uploadKey: { type: Buffer }, // 16 B salt
-    iv: { type: Buffer }, // 12 bytes
-    tag: { type: Buffer }, // 16 bytes
-    isRead: { type: Boolean, default: false },
+    email: { type: String, default: null },
+    isPaused: { type: Boolean },
   },
   { versionKey: false, timestamps: true },
 )
 
-export const Upload = mongoose.model<
+export const Recipients = mongoose.model<
   RecipientDocument,
   mongoose.PaginateModel<RecipientDocument>
 >('Recipient', recipientSchema, 'recipients')
