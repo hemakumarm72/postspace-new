@@ -2,6 +2,7 @@ declare namespace Express {
   interface Request {
     user: {
       userId: string
+      userKey: string
       email?: string
       pinSalt?: string | null
       pinHash?: string | null

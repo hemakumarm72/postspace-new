@@ -9,7 +9,7 @@ import {
 import { otpModel } from '../../../models/otp'
 import { userModel } from '../../../models/user'
 import { badImplementationException } from '../../../utils/apiErrorHandler'
-import { hashPin } from '../../../utils/crypto'
+import { generateHMACKey, hashPin, wrapMasterKey } from '../../../utils/crypto'
 import { getAddToCurrentTime } from '../../../utils/day'
 import { encodeJwt } from '../../../utils/jwt'
 import {
@@ -66,9 +66,11 @@ export const register = async (
     const { password } = req.body
 
     const { ACCESS_TOKEN_EXPIRED_IN, REFRESH_TOKEN_EXPIRED_IN } = process.env
+    const userId = generatedId()
 
     const userRegister: NewUserDocument = {
-      userId: generatedId(),
+      userId,
+      userKey: generateHMACKey(userId, 'userId'),
       email,
       password,
       pinHash: null,
@@ -152,7 +154,7 @@ export const pinVerify = async (
   next: NextFunction,
 ) => {
   try {
-    const { userId } = req.user
+    const { userId, userKey } = req.user
 
     const { ACCESS_TOKEN_EXPIRED_IN, REFRESH_TOKEN_EXPIRED_IN } = process.env
 
@@ -181,6 +183,7 @@ export const pinVerify = async (
     })
 
     return handleResponse(res, 200, {
+      userKey,
       accessToken,
       refreshToken,
     })
@@ -224,5 +227,21 @@ export const refresh = async (
     return handleResponse(res, 200, { accessToken, refreshToken })
   } catch (err: any) {
     next(err)
+  }
+}
+
+export const generatedWrappedKey = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { maskerKey, wrappingKey } = req.body
+    const wrappedKey = wrapMasterKey(maskerKey, wrappingKey)
+    return handleResponse(res, 200, {
+      wrappedKey,
+    })
+  } catch (error) {
+    next(error)
   }
 }

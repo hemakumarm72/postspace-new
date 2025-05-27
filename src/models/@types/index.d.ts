@@ -23,6 +23,7 @@ export type NewOtpDocument = {
 
 export type NewUserDocument = {
   userId: string
+  userKey: string
   email: string
   password: string
   pinSalt: string | null
@@ -65,6 +66,7 @@ export type RecipientDocument = NewRecipientDocument & mongoose.Document
 export type NewDeviceDocument = {
   deviceId: string
   senderId: string
+  deviceKey: string
   recipientId: string
   accessedAt: Date
 }
@@ -73,6 +75,7 @@ export type DeviceDocument = NewDeviceDocument & mongoose.Document
 
 export type NewFileDocument = {
   uploadId: string
+  fileKey: string
   filename: string
   filesize: number
   s3Path: string

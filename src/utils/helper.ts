@@ -7,6 +7,7 @@ export const setUser = (user: NewUserDocument) => {
   return {
     userId: user.userId,
     email: user.email,
+    userKey: user.userKey,
     password: user.password,
     pinHash: user.pinHash,
     pinSalt: user.pinSalt,

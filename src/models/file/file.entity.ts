@@ -1,21 +1,21 @@
-import mongoose, { Schema } from 'mongoose';
-import { FileDocument } from '../@types';
+import mongoose, { Schema } from 'mongoose'
 
+import { FileDocument } from '../@types'
 
 const fileSchema = new Schema(
   {
     uploadId: { type: String },
+    uploadKey: { type: String },
     filename: {
       type: String,
     },
     filesize: { type: Number },
-		s3Path: { type: String },
+    s3Path: { type: String },
   },
   { versionKey: false, timestamps: true },
 )
 
-export const Files = mongoose.model<FileDocument, mongoose.PaginateModel<FileDocument>>(
-  'File',
-  fileSchema,
-  'files',
-)
+export const Files = mongoose.model<
+  FileDocument,
+  mongoose.PaginateModel<FileDocument>
+>('File', fileSchema, 'files')

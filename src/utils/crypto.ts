@@ -24,3 +24,16 @@ export async function hashVerify(hash: string, pin: string) {
     secret: Buffer.from(process.env.secretKey || ''),
   })
 }
+
+export const generateHMACKey = (id: string, type: string) => {
+  const key = process.env.HMAC_SECRET || ''
+  return crypto.createHmac('sha256', key).update(`${type}|${id}`).digest('hex')
+}
+
+export const wrapMasterKey = (masterKey: string, wrappingKey: string) => {
+  const iv = crypto.randomBytes(12)
+  const cipher = crypto.createCipheriv('aes-256-gcm', wrappingKey, iv)
+  const encrypted = Buffer.concat([cipher.update(masterKey), cipher.final()])
+  const tag = cipher.getAuthTag()
+  return { iv, encrypted, tag }
+}

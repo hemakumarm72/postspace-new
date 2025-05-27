@@ -5,6 +5,7 @@ import { DeviceDocument } from '../@types'
 const DeviceSchema = new Schema(
   {
     deviceId: { type: String },
+    deviceKey: { type: String },
     senderId: { type: String },
     recipientId: {
       type: String,

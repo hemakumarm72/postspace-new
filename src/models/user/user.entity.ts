@@ -6,6 +6,7 @@ import { UserDocument } from '../@types'
 const userSchema = new mongoose.Schema(
   {
     userId: { type: String },
+    userKey: { type: String },
     email: { type: String },
     password: { type: String },
     pinSalt: { type: String, default: null },

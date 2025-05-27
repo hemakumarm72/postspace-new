@@ -1,9 +1,15 @@
-import { Schema } from 'express-validator';
+import { Schema } from 'express-validator'
 
-
-
-import { VALIDATION_EMAIL_EXIST, VALIDATION_EMAIL_REGISTER_CHECK, VALIDATION_OTP_CODE, VALIDATION_PASSWORD, VALIDATION_PASSWORD_CHECK, VALIDATION_STRING, VALIDATION_USER_REFRESH_TOKEN, VALIDATION_VERIFY_PIN } from '../../../constants/validation';
-
+import {
+  VALIDATION_EMAIL_EXIST,
+  VALIDATION_EMAIL_REGISTER_CHECK,
+  VALIDATION_OTP_CODE,
+  VALIDATION_PASSWORD,
+  VALIDATION_PASSWORD_CHECK,
+  VALIDATION_STRING,
+  VALIDATION_USER_REFRESH_TOKEN,
+  VALIDATION_VERIFY_PIN,
+} from '../../../constants/validation'
 
 export const PIN_VERIFY_SCHEMA: Schema = {
   pin: VALIDATION_VERIFY_PIN('body'),
@@ -29,4 +35,9 @@ export const REGISTER_SCHEMA: Schema = {
 }
 export const REFRESH_TOKEN_SCHEMA: Schema = {
   refreshToken: VALIDATION_USER_REFRESH_TOKEN('body'),
-};
+}
+
+export const GENERATED_WRAPPING_KEY: Schema = {
+  maskerKey: VALIDATION_STRING('body', 100, '4014'),
+  wrappingKey: VALIDATION_STRING('body', 100, '4014'),
+}
