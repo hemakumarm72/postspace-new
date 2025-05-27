@@ -13,6 +13,7 @@ export const registerDevice = async (
   try {
     const { deviceId, recipientId, senderId } = req.body
     const create: NewDeviceDocument = {
+      deviceKey: 'fd',
       deviceId,
       recipientId,
       senderId,
