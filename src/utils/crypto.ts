@@ -31,9 +31,26 @@ export const generateHMACKey = (id: string, type: string) => {
 }
 
 export const wrapMasterKey = (masterKey: string, wrappingKey: string) => {
-  const iv = crypto.randomBytes(12)
-  const cipher = crypto.createCipheriv('aes-256-gcm', wrappingKey, iv)
-  const encrypted = Buffer.concat([cipher.update(masterKey), cipher.final()])
-  const tag = cipher.getAuthTag()
-  return { iv, encrypted, tag }
+  try {
+    const iv = crypto.randomBytes(12)
+    const keyBuffer = Buffer.from(wrappingKey, 'hex')
+
+    if (keyBuffer.length !== 32) {
+      throw Error(
+        'Invalid wrapping key length. Expected 32 bytes for AES-256-GCM.',
+      )
+    }
+
+    const cipher = crypto.createCipheriv('aes-256-gcm', keyBuffer, iv)
+    const encrypted = Buffer.concat([
+      cipher.update(masterKey, 'utf8'),
+      cipher.final(),
+    ])
+    const tag = cipher.getAuthTag()
+
+    return { iv, encrypted, tag }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
 }
