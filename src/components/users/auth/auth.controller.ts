@@ -183,6 +183,7 @@ export const pinVerify = async (
     })
 
     return handleResponse(res, 200, {
+      userId,
       userKey,
       accessToken,
       refreshToken,
