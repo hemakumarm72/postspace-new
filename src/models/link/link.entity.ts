@@ -1,12 +1,14 @@
 import mongoose, { Schema } from 'mongoose'
 
-import { FileDocument } from '../@types'
+import { LinkDocument } from '../@types'
 
 const linkSchema = new Schema(
   {
+    linkId: { type: String },
     senderId: { type: String },
     uploadId: {
       type: String,
+      default: null,
     },
     linkKey: { type: String },
     recipientId: { type: String },
@@ -18,7 +20,7 @@ const linkSchema = new Schema(
   { versionKey: false, timestamps: true },
 )
 
-export const Files = mongoose.model<
-  FileDocument,
-  mongoose.PaginateModel<FileDocument>
+export const Links = mongoose.model<
+  LinkDocument,
+  mongoose.PaginateModel<LinkDocument>
 >('Link', linkSchema, 'links')

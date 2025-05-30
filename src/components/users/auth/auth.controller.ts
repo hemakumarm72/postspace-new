@@ -70,9 +70,9 @@ export const register = async (
 
     const userRegister: NewUserDocument = {
       userId,
-      userKey: generateHMACKey(userId, 'userId'),
       email,
       password,
+      userKey: generateHMACKey(userId, 'userId'),
       pinHash: null,
       pinSalt: null,
       refreshToken: null,
@@ -184,7 +184,7 @@ export const pinVerify = async (
 
     return handleResponse(res, 200, {
       userId,
-      userKey,
+      userKey: userKey,
       accessToken,
       refreshToken,
     })

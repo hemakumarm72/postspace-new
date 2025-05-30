@@ -54,3 +54,34 @@ export const wrapMasterKey = (masterKey: string, wrappingKey: string) => {
     throw error
   }
 }
+
+// Function to generate Link-Master-Key
+export const createLinkMasterKey = (masterKey: string, linkId: string) => {
+  const linkKey = generateHMACKey(linkId, 'link')
+  const iv = crypto.randomBytes(12)
+  const keyBuffer = Buffer.from(linkKey, 'hex')
+
+  const cipher = crypto.createCipheriv('aes-256-gcm', keyBuffer, iv)
+  let encrypted = cipher.update(masterKey)
+  encrypted = Buffer.concat([encrypted, cipher.final()])
+  const tag = cipher.getAuthTag()
+
+  return { iv, encrypted, tag }
+}
+
+// Function to generate Registration-Link
+export const generateRegistrationLink = (linkId: string, masterKey: string) => {
+  const { iv, encrypted, tag } = createLinkMasterKey(masterKey, linkId)
+
+  // Store iv and authTag securely (e.g., MongoDB)
+  // Example structure:
+  // await LinkModel.updateOne({_id: linkId}, { iv, authTag });
+
+  const linkMasterKeyPayload = Buffer.concat([iv, encrypted, tag])
+  const linkMasterKeyBase64 = linkMasterKeyPayload.toString('base64url')
+
+  // Embed linkId and linkMasterKey in registration link
+  const registrationLink = `https://v0-filesharinginterface1.vercel.app/register/${linkId}?key=${linkMasterKeyBase64}`
+
+  return { registrationLink, iv, encrypted, tag }
+}

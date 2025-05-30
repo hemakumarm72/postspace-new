@@ -5,7 +5,7 @@ import { FileDocument } from '../@types'
 const fileSchema = new Schema(
   {
     uploadId: { type: String },
-    uploadKey: { type: String },
+    fileKey: { type: String },
     filename: {
       type: String,
     },

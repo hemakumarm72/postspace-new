@@ -23,9 +23,9 @@ export type NewOtpDocument = {
 
 export type NewUserDocument = {
   userId: string
-  userKey: string
   email: string
   password: string
+  userKey: string
   pinSalt: string | null
   pinHash: string | null
   attemptFailedCount: number
@@ -84,3 +84,19 @@ export type NewFileDocument = {
 export type FileDocument = mongoose.Document & NewFileDocument
 
 export type OtpDocument = mongoose.Document & NewOtpDocument
+
+export type NewLinkDocument = {
+  linkId: string
+  senderId: string
+  uploadId: string | null
+  linkKey: string
+  recipientId: string
+  iv: Buffer | null
+  tag: Buffer | null
+  isRegistration: boolean
+  accessedAt: Date
+}
+
+export type UpdateLinkDocument = Partial<NewLinkDocument>
+
+export type LinkDocument = mongoose.Document & NewLinkDocument
