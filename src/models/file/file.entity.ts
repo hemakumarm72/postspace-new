@@ -6,11 +6,6 @@ const fileSchema = new Schema(
   {
     uploadId: { type: String },
     fileKey: { type: String },
-    filename: {
-      type: String,
-    },
-    filesize: { type: Number },
-    s3Path: { type: String },
   },
   { versionKey: false, timestamps: true },
 )

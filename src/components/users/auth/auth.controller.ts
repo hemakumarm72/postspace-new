@@ -9,7 +9,7 @@ import {
 import { otpModel } from '../../../models/otp'
 import { userModel } from '../../../models/user'
 import { badImplementationException } from '../../../utils/apiErrorHandler'
-import { generateHMACKey, hashPin, wrapMasterKey } from '../../../utils/crypto'
+import { generateHMACKey, hashPin } from '../../../utils/crypto'
 import { getAddToCurrentTime } from '../../../utils/day'
 import { encodeJwt } from '../../../utils/jwt'
 import {
@@ -228,21 +228,5 @@ export const refresh = async (
     return handleResponse(res, 200, { accessToken, refreshToken })
   } catch (err: any) {
     next(err)
-  }
-}
-
-export const generatedWrappedKey = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const { maskerKey, wrappingKey } = req.body
-    const wrappedKey = wrapMasterKey(maskerKey, wrappingKey)
-    return handleResponse(res, 200, {
-      wrappedKey,
-    })
-  } catch (error) {
-    next(error)
   }
 }

@@ -286,3 +286,27 @@ export const VALIDATION_RECIPIENT_ID = (where: Location): ParamSchema => ({
     },
   },
 })
+
+export const VALIDATION_FILES = (where: Location): ParamSchema => ({
+  in: where,
+  isArray: {
+    errorMessage: 'files must be an array',
+  },
+  custom: {
+    options: (files) => {
+      if (!Array.isArray(files)) return false
+
+      return files.every(
+        (file) =>
+          typeof file.uploadId === 'string' &&
+          typeof file.recipientId === 'string' &&
+          typeof file.filename === 'string' &&
+          typeof file.path === 'string' &&
+          typeof file.filesize === 'number' &&
+          typeof file.mimeType === 'string' &&
+          typeof file.uploadKey === 'string',
+      )
+    },
+    errorMessage: 'Each file must have valid fields of correct types',
+  },
+})

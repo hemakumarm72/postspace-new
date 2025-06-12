@@ -1,9 +1,13 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express';
 
-import { handleResponse } from '../../../middleware/requestHandle'
-import { NewRecipientDocument } from '../../../models/@types'
-import { recipientModel } from '../../../models/recipient'
-import { generatedId } from '../../../utils/randomId'
+
+
+import { handleResponse } from '../../../middleware/requestHandle';
+import { NewRecipientDocument } from '../../../models/@types';
+import { recipientModel } from '../../../models/recipient';
+import { uploadModel } from '../../../models/upload';
+import { generatedId } from '../../../utils/randomId';
+
 
 export const getRecipients = async (
   req: Request,
@@ -73,6 +77,21 @@ export const deleteRecipients = async (
 
     await recipientModel.deleteOne('recipientId', recipientId)
     return handleResponse(res, 200, {})
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getRecipientFiles = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { recipientId } = req.params
+
+    const result = await uploadModel.get({ recipientId })
+    return handleResponse(res, 200, { result })
   } catch (error) {
     next(error)
   }

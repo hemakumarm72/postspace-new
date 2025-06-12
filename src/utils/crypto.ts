@@ -30,30 +30,6 @@ export const generateHMACKey = (id: string, type: string) => {
   return crypto.createHmac('sha256', key).update(`${type}|${id}`).digest('hex')
 }
 
-export const wrapMasterKey = (masterKey: string, wrappingKey: string) => {
-  try {
-    const iv = crypto.randomBytes(12)
-    const keyBuffer = Buffer.from(wrappingKey, 'hex')
-
-    if (keyBuffer.length !== 32) {
-      throw Error(
-        'Invalid wrapping key length. Expected 32 bytes for AES-256-GCM.',
-      )
-    }
-
-    const cipher = crypto.createCipheriv('aes-256-gcm', keyBuffer, iv)
-    const encrypted = Buffer.concat([
-      cipher.update(masterKey, 'utf8'),
-      cipher.final(),
-    ])
-    const tag = cipher.getAuthTag()
-
-    return { iv, encrypted, tag }
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
 
 // Function to generate Link-Master-Key
 export const createLinkMasterKey = (masterKey: string, linkId: string) => {

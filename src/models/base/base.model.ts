@@ -1,3 +1,4 @@
+import { AnyBulkWriteOperation } from 'mongodb'
 import { ClientSession, Document, FilterQuery, Model } from 'mongoose'
 
 import { UpdateType } from '../@types'
@@ -13,6 +14,11 @@ export abstract class BaseModel<T extends Document> {
   async add(data: Partial<T>, session?: ClientSession | null): Promise<T> {
     const newDocument = new this.model(data)
     return await newDocument.save({ session })
+  }
+
+  async multiAdd(data: Partial<T>[]) {
+    await this.model.insertMany(data)
+    return
   }
 
   // Retrieve all documents (with optional filters)

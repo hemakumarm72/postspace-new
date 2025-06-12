@@ -13,6 +13,8 @@ const router = express.Router()
 
 router.get('/', controller.getRecipients)
 
+router.get('/:recipientId/files', controller.getRecipientFiles)
+
 router.post(
   '/',
   checkSchema(CREATE_RECIPIENTS),

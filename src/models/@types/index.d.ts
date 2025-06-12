@@ -38,16 +38,14 @@ export type UserDocument = NewUserDocument & mongoose.Document
 export type UpdateUserDocument = Partial<UserDocument>
 
 export type NewUploadDocument = {
+  uploadId: string
   senderId: string
   recipientId: string
-  uploadId: string
   filename: string
   path: string
   filesize: number
   mimeType: string
-  uploadKey: Buffer
-  iv: Buffer
-  tag: Buffer
+  uploadKey: string
   isRead: boolean
 }
 
@@ -76,9 +74,6 @@ export type DeviceDocument = NewDeviceDocument & mongoose.Document
 export type NewFileDocument = {
   uploadId: string
   fileKey: string
-  filename: string
-  filesize: number
-  s3Path: string
 }
 
 export type FileDocument = mongoose.Document & NewFileDocument

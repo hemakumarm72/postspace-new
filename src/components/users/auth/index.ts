@@ -59,11 +59,4 @@ router.put(
   controller.refresh,
 )
 
-router.put(
-  '/wrapped-key',
-  checkSchema(GENERATED_WRAPPING_KEY),
-  checkValidation,
-  controller.generatedWrappedKey,
-)
-
 export default router
