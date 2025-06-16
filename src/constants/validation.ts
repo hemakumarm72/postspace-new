@@ -304,6 +304,7 @@ export const VALIDATION_FILES = (where: Location): ParamSchema => ({
           typeof file.path === 'string' &&
           typeof file.filesize === 'number' &&
           typeof file.mimeType === 'string' &&
+          typeof file.fileKey === 'string' &&
           typeof file.uploadKey === 'string',
       )
     },

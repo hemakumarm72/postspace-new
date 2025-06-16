@@ -16,6 +16,8 @@ router.post(
   controller.UploadFile,
 )
 
+router.put('/status', checkValidation, controller.updateFileStatus)
+
 router.delete('/', checkValidation, controller.deleteFiles)
 
 // TODO: delete file using uploadId

@@ -1,5 +1,11 @@
 import { AnyBulkWriteOperation } from 'mongodb'
-import { ClientSession, Document, FilterQuery, Model } from 'mongoose'
+import {
+  ClientSession,
+  Document,
+  FilterQuery,
+  Model,
+  UpdateQuery,
+} from 'mongoose'
 
 import { UpdateType } from '../@types'
 
@@ -68,6 +74,22 @@ export abstract class BaseModel<T extends Document> {
     }
   }
 
+  async updateMany(
+    { fieldName, value, updateData }: UpdateType<T>,
+    session?: ClientSession | null,
+  ) {
+    try {
+      const query: FilterQuery<T> = {
+        [fieldName]: { $in: value },
+      } as FilterQuery<T> // Dynamically appending 'Id'
+      await this.model.updateMany(query, updateData, { session })
+      return
+    } catch (error) {
+      console.error(`Error updating document  :`, error) // queryField used here
+      throw new Error('Error updating document')
+    }
+  }
+
   async deleteOne(
     fieldName: keyof T,
     value: any,
@@ -87,12 +109,12 @@ export abstract class BaseModel<T extends Document> {
 
   async deleteMany(
     fieldName: keyof T,
-    value: any,
+    values: any,
     session?: ClientSession | null,
   ) {
     try {
       const query: FilterQuery<T> = {
-        [fieldName]: value,
+        [fieldName]: values,
       } as FilterQuery<T> // Dynamically appending 'Id'
       await this.model.deleteMany(query, { session })
       return

@@ -1,14 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express'
 
-
-
-import { handleResponse } from '../../../middleware/requestHandle';
-import { NewUploadDocument } from '../../../models/@types';
-import { fileModel } from '../../../models/file';
-import { uploadModel } from '../../../models/upload';
-import { generateHMACKey } from '../../../utils/crypto';
-import { generatedId } from '../../../utils/randomId';
-
+import { handleResponse } from '../../../middleware/requestHandle'
+import { NewUploadDocument } from '../../../models/@types'
+import { fileModel } from '../../../models/file'
+import { uploadModel } from '../../../models/upload'
+import { generateHMACKey } from '../../../utils/crypto'
+import { generatedId } from '../../../utils/randomId'
 
 type UploadFile = {
   uploadId: string
@@ -120,6 +117,26 @@ export const deleteFiles = async (
     const { uploadId } = req.body
 
     await uploadModel.deleteManyIds('uploadId', uploadId)
+
+    return handleResponse(res, 200, {})
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const updateFileStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { uploadId } = req.body
+
+    await uploadModel.updateMany({
+      fieldName: 'uploadId',
+      value: uploadId,
+      updateData: { $set: { isRead: true } },
+    })
 
     return handleResponse(res, 200, {})
   } catch (error) {
