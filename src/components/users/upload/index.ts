@@ -9,13 +9,14 @@ const router = express.Router()
 
 router.get('/generatedUploadId', checkValidation, controller.generatedUploadId)
 
-
 router.post(
   '/',
   checkSchema(UPLOAD_SCHEMA),
   checkValidation,
   controller.UploadFile,
 )
+
+router.delete('/', checkValidation, controller.deleteFiles)
 
 // TODO: delete file using uploadId
 

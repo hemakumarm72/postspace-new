@@ -52,9 +52,6 @@ export const UploadFile = async (
   }
 }
 
-
-
-
 export const generatedUploadId = (
   req: Request,
   res: Response,
@@ -109,6 +106,22 @@ export const downloadFile = async (
     const { userId } = req.user
     const result = await uploadModel.get({ senderId: userId })
     return handleResponse(res, 200, { result })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const deleteFiles = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { uploadId } = req.body
+
+    await uploadModel.deleteManyIds('uploadId', uploadId)
+
+    return handleResponse(res, 200, {})
   } catch (error) {
     next(error)
   }

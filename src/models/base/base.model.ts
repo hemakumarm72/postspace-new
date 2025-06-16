@@ -101,4 +101,21 @@ export abstract class BaseModel<T extends Document> {
       throw new Error('Error fetching document')
     }
   }
+
+  async deleteManyIds(
+    fieldName: keyof T,
+    values: string[],
+    session?: ClientSession | null,
+  ) {
+    try {
+      const query: FilterQuery<T> = {
+        [fieldName]: { $in: values },
+      } as FilterQuery<T>
+
+      await this.model.deleteMany(query, { session })
+      return // you can return result.deletedCount or just result
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
 }

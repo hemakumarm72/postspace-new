@@ -6,6 +6,7 @@ import * as controller from './recipient.controller'
 import {
   CREATE_RECIPIENTS,
   DELETE_RECIPIENTS,
+  GET_RECIPIENTS_ID,
   UPDATE_RECIPIENTS,
 } from './recipient.validation'
 
@@ -13,7 +14,12 @@ const router = express.Router()
 
 router.get('/', controller.getRecipients)
 
-router.get('/:recipientId/files', controller.getRecipientFiles)
+router.get(
+  '/:recipientId/files',
+  checkSchema(GET_RECIPIENTS_ID),
+  checkValidation,
+  controller.getRecipientFiles,
+)
 
 router.post(
   '/',
