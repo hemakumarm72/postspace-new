@@ -37,7 +37,10 @@ export const createRegistrationLink = async (
 
     await service.createRegistrationLink(create)
 
-    return handleResponse(res, 200, { linkKey: create.linkKey })
+    return handleResponse(res, 200, {
+      linkId: create.linkId,
+      linkKey: create.linkKey,
+    })
   } catch (error) {
     next(error)
   }
