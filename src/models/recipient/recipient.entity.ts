@@ -11,7 +11,7 @@ const recipientSchema = new Schema(
       required: true,
     },
     email: { type: String, default: null },
-    isPaused: { type: Boolean },
+    isPaused: { type: Boolean, default: false },
   },
   { versionKey: false, timestamps: true },
 )

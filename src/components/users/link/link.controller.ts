@@ -3,6 +3,10 @@ import { NextFunction, Request, Response } from 'express'
 
 import { handleResponse } from '../../../middleware/requestHandle'
 import { NewLinkDocument } from '../../../models/@types'
+import { fileModel } from '../../../models/file'
+import { linkModel } from '../../../models/link'
+import { recipientModel } from '../../../models/recipient'
+import { uploadModel } from '../../../models/upload'
 import {
   generateHMACKey,
   generateRegistrationLink,
@@ -25,6 +29,7 @@ export const createRegistrationLink = async (
     const { recipientId } = req.body
 
     const linkId = generatedId()
+
     const create: NewLinkDocument = {
       linkId: linkId,
       senderId: userId,
@@ -46,13 +51,24 @@ export const createRegistrationLink = async (
   }
 }
 
-// exports.createDownloadLink = async (senderId, recipientId, uploadId) => {
-//   // is_registration=false, iv/tag not required
-//   const link = new Link({
-//     sender_id: senderId,
-//     recipient_id: recipientId,
-//     upload_id: uploadId,
-//     is_registration: false,
-//   })
-//   return link.save()
-// }
+export const getRecipientAndFiles = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { linkId } = req.params
+    const getLinks = await linkModel.getByFieldAndValue('linkId', linkId)
+
+    const recipient = await recipientModel.getByFieldAndValue(
+      'recipientId',
+      getLinks?.recipientId,
+    )
+
+    const files = await uploadModel.get({ recipientId: recipient?.recipientId })
+
+    return handleResponse(res, 200, { recipient, files })
+  } catch (error) {
+    next(error)
+  }
+}

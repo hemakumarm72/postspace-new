@@ -1,6 +1,7 @@
 import { Location, ParamSchema } from 'express-validator'
 
 import { UpdateType, UserDocument } from '../models/@types'
+import { linkModel } from '../models/link'
 import { otpModel } from '../models/otp'
 import { recipientModel } from '../models/recipient'
 import { userModel } from '../models/user'
@@ -282,6 +283,19 @@ export const VALIDATION_RECIPIENT_ID = (where: Location): ParamSchema => ({
       const get = await recipientModel.getByFieldAndValue('recipientId', value)
       if (!get) throw Error('4015') // TODO: recipient not found
 
+      return true
+    },
+  },
+})
+
+export const VALIDATION_LINK_ID = (where: Location): ParamSchema => ({
+  in: [where],
+  isString: true,
+  notEmpty: true,
+  custom: {
+    options: async (value, { req, location, path }) => {
+      const get = await linkModel.getByFieldAndValue('linkId', value)
+      if (!get) throw Error('4018') // TODO: link id not found
       return true
     },
   },

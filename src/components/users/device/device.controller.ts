@@ -3,7 +3,9 @@ import { NextFunction, Request, Response } from 'express'
 import { handleResponse } from '../../../middleware/requestHandle'
 import { NewDeviceDocument } from '../../../models/@types'
 import { deviceModel } from '../../../models/device'
+import { generateHMACKey } from '../../../utils/crypto'
 import { getCurrentJST, getCurrentTime } from '../../../utils/day'
+import { generatedId } from '../../../utils/randomId'
 
 export const registerDevice = async (
   req: Request,
@@ -11,18 +13,35 @@ export const registerDevice = async (
   next: NextFunction,
 ) => {
   try {
-    const { deviceId, recipientId, senderId } = req.body
-    const create: NewDeviceDocument = {
-      deviceKey: 'fd',
-      deviceId,
+    const { recipientId } = req.body
+
+    const { userId } = req.user
+
+    const deviceId = generatedId()
+
+    const devices = await deviceModel.getByFieldAndValue(
+      'recipientId',
       recipientId,
-      senderId,
+    )
+    
+    if (devices) {
+      return handleResponse(res, 200, {
+        deviceId: devices.deviceId,
+        deviceKey: devices.deviceKey,
+      })
+    }
+
+    const create: NewDeviceDocument = {
+      deviceId,
+      deviceKey: generateHMACKey(deviceId, 'deviceId'),
+      recipientId,
+      senderId: userId,
       accessedAt: new Date(getCurrentJST()),
     }
 
     await deviceModel.add(create)
 
-    return handleResponse(res, 200, {})
+    return handleResponse(res, 200, { deviceId, deviceKey: create.deviceKey })
   } catch (error) {
     next(error)
   }
