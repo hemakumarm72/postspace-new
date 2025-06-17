@@ -22,15 +22,9 @@ export const createRegistrationLink = async (
 ) => {
   try {
     const { userId } = req.user
-    const { masterKey, recipientId } = req.body
+    const { recipientId } = req.body
 
     const linkId = generatedId()
-
-    const { iv, registrationLink, tag } = generateRegistrationLink(
-      linkId,
-      masterKey,
-    )
-
     const create: NewLinkDocument = {
       linkId: linkId,
       senderId: userId,
@@ -38,14 +32,12 @@ export const createRegistrationLink = async (
       linkKey: generateHMACKey(linkId, 'linkId'),
       recipientId: recipientId,
       isRegistration: true,
-      iv: iv,
-      tag: tag,
       accessedAt: new Date(getCurrentJST()),
     }
 
     await service.createRegistrationLink(create)
 
-    return handleResponse(res, 200, { registrationLink: registrationLink })
+    return handleResponse(res, 200, { linkKey: create.linkKey })
   } catch (error) {
     next(error)
   }

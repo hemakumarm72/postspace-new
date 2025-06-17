@@ -3,7 +3,7 @@ import crypto from 'crypto'
 
 export const hashPin = async (pin: string) => {
   try {
-    const pinSalt = crypto.randomBytes(16).toString('hex')
+    const pinSalt = crypto.randomBytes(32).toString('hex')
     const pinHash = await argon2.hash(pin, {
       type: argon2.argon2id,
       salt: Buffer.from(pinSalt, 'hex'),

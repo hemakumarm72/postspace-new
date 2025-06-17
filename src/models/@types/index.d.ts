@@ -86,8 +86,6 @@ export type NewLinkDocument = {
   uploadId: string | null
   linkKey: string
   recipientId: string
-  iv: Buffer | null
-  tag: Buffer | null
   isRegistration: boolean
   accessedAt: Date
 }

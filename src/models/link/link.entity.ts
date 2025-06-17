@@ -12,8 +12,6 @@ const linkSchema = new Schema(
     },
     linkKey: { type: String },
     recipientId: { type: String },
-    iv: { type: Buffer }, // 12 bytes
-    tag: { type: Buffer }, // 16 bytes
     isRegistration: { type: Boolean, default: false },
     accessedAt: { type: Date },
   },
