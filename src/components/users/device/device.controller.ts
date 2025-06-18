@@ -25,7 +25,7 @@ export const registerDevice = async (
       return handleResponse(res, 200, {
         deviceId: devices.deviceId,
         deviceKey: devices.deviceKey,
-        registered: false,
+        isNew: false,
       })
     }
 
@@ -42,7 +42,7 @@ export const registerDevice = async (
     return handleResponse(res, 200, {
       deviceId,
       deviceKey: create.deviceKey,
-      registered: true,
+      isNew: true,
     })
   } catch (error) {
     next(error)
