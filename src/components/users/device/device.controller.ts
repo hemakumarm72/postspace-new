@@ -23,7 +23,7 @@ export const registerDevice = async (
       'recipientId',
       recipientId,
     )
-    
+
     if (devices) {
       return handleResponse(res, 200, {
         deviceId: devices.deviceId,
