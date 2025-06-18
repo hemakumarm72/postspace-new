@@ -19,15 +19,13 @@ export const registerDevice = async (
 
     const deviceId = generatedId()
 
-    const devices = await deviceModel.getByFieldAndValue(
-      'recipientId',
-      recipientId,
-    )
+    const devices = await deviceModel.getOne({ senderId: userId, recipientId })
 
     if (devices) {
       return handleResponse(res, 200, {
         deviceId: devices.deviceId,
         deviceKey: devices.deviceKey,
+        registered: false,
       })
     }
 
@@ -41,7 +39,11 @@ export const registerDevice = async (
 
     await deviceModel.add(create)
 
-    return handleResponse(res, 200, { deviceId, deviceKey: create.deviceKey })
+    return handleResponse(res, 200, {
+      deviceId,
+      deviceKey: create.deviceKey,
+      registered: true,
+    })
   } catch (error) {
     next(error)
   }

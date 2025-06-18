@@ -7,6 +7,7 @@ import { fileModel } from '../../../models/file'
 import { linkModel } from '../../../models/link'
 import { recipientModel } from '../../../models/recipient'
 import { uploadModel } from '../../../models/upload'
+import { invalidException } from '../../../utils/apiErrorHandler'
 import {
   generateHMACKey,
   generateRegistrationLink,
@@ -59,6 +60,8 @@ export const getRecipientAndFiles = async (
   try {
     const { linkId } = req.params
     const getLinks = await linkModel.getByFieldAndValue('linkId', linkId)
+
+    if (!getLinks) throw invalidException('link is expired', '4019')
 
     const recipient = await recipientModel.getByFieldAndValue(
       'recipientId',
