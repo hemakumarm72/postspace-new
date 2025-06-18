@@ -29,6 +29,17 @@ export const createRegistrationLink = async (
     const { userId } = req.user
     const { recipientId } = req.body
 
+    const isExiting = await linkModel.getByFieldAndValue(
+      'recipientId',
+      recipientId,
+    )
+
+    if (isExiting)
+      return handleResponse(res, 200, {
+        linkId: isExiting.linkId,
+        linkKey: isExiting.linkKey,
+      })
+
     const linkId = generatedId()
 
     const create: NewLinkDocument = {
@@ -70,7 +81,7 @@ export const getRecipientAndFiles = async (
 
     const files = await uploadModel.get({ recipientId: recipient?.recipientId })
 
-    return handleResponse(res, 200, { recipient, files })
+    return handleResponse(res, 200, { link: getLinks, recipient, files })
   } catch (error) {
     next(error)
   }
