@@ -1,18 +1,13 @@
-import express from 'express'
-import { checkSchema } from 'express-validator'
+import express from 'express';
+import { checkSchema } from 'express-validator';
 
-import { isAuth } from '../../../utils/auth'
-import { checkValidation } from '../../../utils/validation'
-import * as controller from './auth.controller'
-import {
-  EMAIL_VERIFICATION_SCHEMA,
-  GENERATED_WRAPPING_KEY,
-  LOGIN_SCHEMA,
-  OTP_VERIFY_SCHEMA,
-  PIN_VERIFY_SCHEMA,
-  REFRESH_TOKEN_SCHEMA,
-  REGISTER_SCHEMA,
-} from './auth.validation'
+
+
+import { isAuth } from '../../../utils/auth';
+import { checkValidation } from '../../../utils/validation';
+import * as controller from './auth.controller';
+import { EMAIL_VERIFICATION_SCHEMA, GENERATED_WRAPPING_KEY, LOGIN_SCHEMA, OTP_VERIFY_SCHEMA, PIN_UPDATE_SCHEMA, PIN_VERIFY_SCHEMA, REFRESH_TOKEN_SCHEMA, REGISTER_SCHEMA } from './auth.validation';
+
 
 const router = express.Router()
 
@@ -50,6 +45,14 @@ router.put(
   checkSchema(PIN_VERIFY_SCHEMA),
   checkValidation,
   controller.pinVerify,
+)
+
+router.put(
+  '/pin-update',
+  isAuth,
+  checkSchema(PIN_UPDATE_SCHEMA),
+  checkValidation,
+  controller.pinUpdate,
 )
 
 router.put(

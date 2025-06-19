@@ -188,6 +188,7 @@ export const pinVerify = async (
       userKey: userKey,
       accessToken,
       refreshToken,
+      isNew: false,
     })
   } catch (error) {
     next(error)

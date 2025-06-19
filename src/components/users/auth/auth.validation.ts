@@ -15,6 +15,10 @@ export const PIN_VERIFY_SCHEMA: Schema = {
   pin: VALIDATION_VERIFY_PIN('body'),
 }
 
+export const PIN_UPDATE_SCHEMA: Schema = {
+  pin: VALIDATION_STRING('body', 20, '4011'),
+}
+
 export const LOGIN_SCHEMA: Schema = {
   email: VALIDATION_EMAIL_EXIST('body'),
   password: VALIDATION_PASSWORD_CHECK('body'),
