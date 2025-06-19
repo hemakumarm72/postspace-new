@@ -96,9 +96,10 @@ export const register = async (
     return handleResponse(res, 200, {
       accessToken,
       refreshToken,
+      isNew: true,
     })
-  } catch (err) {
-    next(err)
+  } catch (error) {
+    next(error)
   }
 }
 

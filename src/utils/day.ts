@@ -13,7 +13,7 @@ export const getAddToCurrentTime = (
   num: number,
   unit: dayjs.ManipulateType,
 ) => {
-  return dayjs().tz('Asia/Tokyo').add(num, unit).format('YYYY-MM-DD HH:mm:ss')
+  return dayjs().add(num, unit).format('YYYY-MM-DD HH:mm:ss')
 }
 
 export const isAfterCurrentTime = (time: string) => {
