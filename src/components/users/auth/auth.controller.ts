@@ -127,7 +127,7 @@ export const pinUpdate = async (
   next: NextFunction,
 ) => {
   try {
-    const { userId } = req.user
+    const { userId, userKey } = req.user
     const { pin } = req.body
 
     const { pinHash, pinSalt } = await hashPin(pin)
@@ -143,7 +143,10 @@ export const pinUpdate = async (
       updateData: update,
     })
 
-    return handleResponse(res, 200, {})
+    return handleResponse(res, 200, {
+      userId,
+      userKey: userKey,
+    })
   } catch (error) {
     next(error)
   }
