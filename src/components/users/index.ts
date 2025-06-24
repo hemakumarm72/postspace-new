@@ -5,10 +5,10 @@ import express from 'express';
 import { isUser } from '../../utils/auth';
 import authComponent from './auth';
 import deviceComponent from './device';
+import guestComponent from './guest';
 import linkComponent from './link';
 import recipientComponent from './recipient';
 import uploadComponent from './upload';
-import guestComponent from './guest';
 
 
 const router = express.Router()

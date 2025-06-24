@@ -8,7 +8,7 @@ import { CREATE_LINK } from './guest.validation'
 const router = express.Router()
 
 router.get(
-  '/:linkId/shared/files',
+  '/link/:linkId/shared/files',
   checkSchema(CREATE_LINK),
   checkValidation,
   controller.getRecipientAndFiles,
