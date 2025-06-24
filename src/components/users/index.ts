@@ -11,7 +11,7 @@ const router = express.Router()
 
 router.use('/auth', authComponent)
 router.use('/recipient', isUser, recipientComponent)
-router.use('/link', isUser, linkComponent)
+router.use('/link', linkComponent)
 router.use('/upload', isUser, uploadComponent)
 router.use('/device', isUser, deviceComponent)
 

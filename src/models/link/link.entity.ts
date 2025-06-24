@@ -11,6 +11,8 @@ const linkSchema = new Schema(
       default: null,
     },
     linkKey: { type: String },
+    isGuest: { type: Boolean, default: false },
+    guestKey: { type: String },
     recipientId: { type: String },
     isRegistration: { type: Boolean, default: false },
     accessedAt: { type: Date },
