@@ -22,11 +22,6 @@ router.get(
   controller.getRecipientAndFiles,
 )
 
-router.get(
-  '/:linkId/shared/files',
-  checkSchema(CREATE_LINK),
-  checkValidation,
-  controller.getRecipientAndFiles,
-)
+
 
 export default router
