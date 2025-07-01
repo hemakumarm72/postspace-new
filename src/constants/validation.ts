@@ -1,21 +1,23 @@
-import { Location, ParamSchema } from 'express-validator';
+import { Location, ParamSchema } from 'express-validator'
 
-
-
-import { UpdateType, UserDocument } from '../models/@types';
-import { linkModel } from '../models/link';
-import { otpModel } from '../models/otp';
-import { recipientModel } from '../models/recipient';
-import { uploadModel } from '../models/upload';
-import { userModel } from '../models/user';
-import { comparePass } from '../utils/bcrypt';
-import { hashVerify } from '../utils/crypto';
-import { getAddToCurrentTime } from '../utils/day';
-import { setUser } from '../utils/helper';
-import { decodeJwt } from '../utils/jwt';
-import { REGEXP_PASSWORD } from '../utils/regexp';
-import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from './length';
-
+import { UpdateType, UserDocument } from '../models/@types'
+import { deviceModel } from '../models/device'
+import { linkModel } from '../models/link'
+import { otpModel } from '../models/otp'
+import { recipientModel } from '../models/recipient'
+import { uploadModel } from '../models/upload'
+import { userModel } from '../models/user'
+import { comparePass } from '../utils/bcrypt'
+import { hashVerify } from '../utils/crypto'
+import { getAddToCurrentTime } from '../utils/day'
+import { setUser } from '../utils/helper'
+import { decodeJwt } from '../utils/jwt'
+import { REGEXP_PASSWORD } from '../utils/regexp'
+import {
+  EMAIL_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from './length'
 
 export const VALIDATION_LOCALE = (where: Location): ParamSchema => ({
   in: [where],
@@ -301,7 +303,6 @@ export const VALIDATION_LINK_ID = (where: Location): ParamSchema => ({
   },
 })
 
-
 export const VALIDATION_UPLOAD_ID = (where: Location): ParamSchema => ({
   in: [where],
   isString: true,
@@ -324,11 +325,19 @@ export const VALIDATION_LINK = (where: Location): ParamSchema => ({
       const get = await linkModel.getByFieldAndValue('linkId', value)
       if (!get) throw Error('4018') // TODO: link id not found
 
-      if (get.uploadId && !get.isRegistration) throw Error('4020')
+      if (get.uploadId) {
+        const device = await deviceModel.getByFieldAndValue(
+          'deviceId',
+          get.recipientId,
+        )
+
+        if (!device) throw Error('4020')
+      }
       const recipient = await recipientModel.getByFieldAndValue(
         'recipientId',
         get?.recipientId,
       )
+
       if (!recipient) throw Error('4015')
       const query = {} as any
       query.recipientId = recipient?.recipientId
