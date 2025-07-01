@@ -92,10 +92,15 @@ export const getRecipientAndFiles = async (
       getLinks?.recipientId,
     )
 
-    const files = await uploadModel.get({
-      recipientId: recipient?.recipientId,
-      uploadId: getLinks.uploadId,
-    })
+    if (!recipient) throw invalidException('recipient not found', '4015')
+
+    const query = {} as any
+    query.recipientId = recipient?.recipientId
+    if (getLinks.uploadId) {
+      query.uploadId = getLinks?.uploadId
+    }
+
+    const files = await uploadModel.get(query)
 
     return handleResponse(res, 200, { link: getLinks, recipient, files })
   } catch (error) {

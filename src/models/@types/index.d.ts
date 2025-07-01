@@ -39,7 +39,7 @@ export type UserDocument = NewUserDocument & mongoose.Document
 export type UpdateUserDocument = Partial<UserDocument>
 
 export type NewUploadDocument = {
-  uploadId: string | null
+  uploadId: string
   senderId: string
   recipientId: string
   filename: string
