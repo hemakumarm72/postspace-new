@@ -20,6 +20,8 @@ import * as service from './guest.service'
 
 // export const getLink = async () => {}
 
+
+
 export const createRegistrationLink = async (
   req: Request,
   res: Response,

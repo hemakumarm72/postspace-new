@@ -23,11 +23,12 @@ export type NewOtpDocument = {
 
 export type NewUserDocument = {
   userId: string
-  email: string
+  email: string | null
   password: string
   userKey: string
   pinSalt: string | null
   pinHash: string | null
+  isGuest: boolean
   attemptFailedCount: number
   blockUntil: Date | null
   refreshToken: string | null
@@ -38,7 +39,7 @@ export type UserDocument = NewUserDocument & mongoose.Document
 export type UpdateUserDocument = Partial<UserDocument>
 
 export type NewUploadDocument = {
-  uploadId: string
+  uploadId: string | null
   senderId: string
   recipientId: string
   filename: string

@@ -72,6 +72,7 @@ export const register = async (
       userId,
       email,
       password,
+      isGuest: false,
       userKey: generateHMACKey(userId, 'userId'),
       pinHash: null,
       pinSalt: null,
@@ -97,6 +98,52 @@ export const register = async (
       accessToken,
       refreshToken,
       isNew: true,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const guestRegister = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { ACCESS_TOKEN_EXPIRED_IN, REFRESH_TOKEN_EXPIRED_IN } = process.env
+
+    const userId = generatedId()
+    const userRegister: NewUserDocument = {
+      userId,
+      email: null,
+      password: 'Test@1234',
+      isGuest: true,
+      userKey: generateHMACKey(userId, 'userId'),
+      pinHash: null,
+      pinSalt: null,
+      refreshToken: null,
+      attemptFailedCount: 0,
+      blockUntil: null,
+    }
+
+    const accessToken = encodeJwt(
+      { id: userRegister.userId },
+      ACCESS_TOKEN_EXPIRED_IN || '5m',
+      'access',
+    )
+    const refreshToken = encodeJwt(
+      { id: userRegister.userId },
+      REFRESH_TOKEN_EXPIRED_IN || '30d',
+      'refresh',
+    )
+    userRegister.refreshToken = refreshToken
+
+    await userModel.add(userRegister)
+    return handleResponse(res, 200, {
+      accessToken,
+      refreshToken,
+      isNew: true,
+      isGuest: true,
     })
   } catch (error) {
     next(error)

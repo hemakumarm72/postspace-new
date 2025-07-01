@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
-import mongoosePaginate from 'mongoose-paginate-v2';
+import bcrypt from 'bcrypt'
+import mongoose from 'mongoose'
+import mongoosePaginate from 'mongoose-paginate-v2'
 
-
-
-import { UserDocument } from '../@types';
-
+import { UserDocument } from '../@types'
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,6 +13,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     pinSalt: { type: String, default: null },
     pinHash: { type: String, default: null },
+    isGuest: { type: Boolean, default: false },
     refreshToken: { type: String, default: null },
     attemptFailedCount: { type: Number, default: 0 },
     blockUntil: { type: Date, default: null },
@@ -38,7 +36,6 @@ userSchema.pre('save', function save(next) {
     next(err as Error)
   }
 })
-
 
 export const Users = mongoose.model<
   UserDocument,

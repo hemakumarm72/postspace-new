@@ -63,6 +63,19 @@ export const createRegistrationLink = async (
   }
 }
 
+// export const createFileLink = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => {
+//   try {
+
+//     return handleResponse(res, 200, {})
+//   } catch (error) {
+//     next(error)
+//   }
+// }
+
 export const getRecipientAndFiles = async (
   req: Request,
   res: Response,
@@ -79,7 +92,10 @@ export const getRecipientAndFiles = async (
       getLinks?.recipientId,
     )
 
-    const files = await uploadModel.get({ recipientId: recipient?.recipientId })
+    const files = await uploadModel.get({
+      recipientId: recipient?.recipientId,
+      uploadId: getLinks.uploadId,
+    })
 
     return handleResponse(res, 200, { link: getLinks, recipient, files })
   } catch (error) {
