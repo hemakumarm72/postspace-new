@@ -40,8 +40,7 @@ export const registerDevice = async (
       })
     }
 
-    
-    if (devices?.senderId !== userId) {
+    if (devices && devices.senderId !== userId) {
       throw invalidException('device already register', '4030')
     }
 

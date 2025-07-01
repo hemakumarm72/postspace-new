@@ -1,23 +1,22 @@
-import { Location, ParamSchema } from 'express-validator'
+import { Location, ParamSchema } from 'express-validator';
 
-import { UpdateType, UserDocument } from '../models/@types'
-import { deviceModel } from '../models/device'
-import { linkModel } from '../models/link'
-import { otpModel } from '../models/otp'
-import { recipientModel } from '../models/recipient'
-import { uploadModel } from '../models/upload'
-import { userModel } from '../models/user'
-import { comparePass } from '../utils/bcrypt'
-import { hashVerify } from '../utils/crypto'
-import { getAddToCurrentTime } from '../utils/day'
-import { setUser } from '../utils/helper'
-import { decodeJwt } from '../utils/jwt'
-import { REGEXP_PASSWORD } from '../utils/regexp'
-import {
-  EMAIL_MAX_LENGTH,
-  PASSWORD_MAX_LENGTH,
-  PASSWORD_MIN_LENGTH,
-} from './length'
+
+
+import { UpdateType, UserDocument } from '../models/@types';
+import { deviceModel } from '../models/device';
+import { linkModel } from '../models/link';
+import { otpModel } from '../models/otp';
+import { recipientModel } from '../models/recipient';
+import { uploadModel } from '../models/upload';
+import { userModel } from '../models/user';
+import { comparePass } from '../utils/bcrypt';
+import { hashVerify } from '../utils/crypto';
+import { getAddToCurrentTime } from '../utils/day';
+import { setUser } from '../utils/helper';
+import { decodeJwt } from '../utils/jwt';
+import { REGEXP_PASSWORD } from '../utils/regexp';
+import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from './length';
+
 
 export const VALIDATION_LOCALE = (where: Location): ParamSchema => ({
   in: [where],
@@ -327,7 +326,7 @@ export const VALIDATION_LINK = (where: Location): ParamSchema => ({
 
       if (get.uploadId) {
         const device = await deviceModel.getByFieldAndValue(
-          'deviceId',
+          'recipientId',
           get.recipientId,
         )
 
