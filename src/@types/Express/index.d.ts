@@ -19,9 +19,8 @@ declare namespace Express {
       email: string
       userId?: string | null
     }
-    space: any
-    receiver: any
-    notification: any
-    plan: any
+    link: LinkDocument
+    recipient: RecipientDocument
+    files: UploadDocument[]
   }
 }
