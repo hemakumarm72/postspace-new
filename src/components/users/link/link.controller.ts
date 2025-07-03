@@ -1,21 +1,21 @@
 // export const linkRegistration = async () => {}
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express'
 
-
-
-import { handleResponse } from '../../../middleware/requestHandle';
-import { NewLinkDocument } from '../../../models/@types';
-import { deviceModel } from '../../../models/device';
-import { fileModel } from '../../../models/file';
-import { linkModel } from '../../../models/link';
-import { recipientModel } from '../../../models/recipient';
-import { uploadModel } from '../../../models/upload';
-import { invalidException } from '../../../utils/apiErrorHandler';
-import { generateHMACKey, generateRegistrationLink } from '../../../utils/crypto';
-import { getCurrentJST } from '../../../utils/day';
-import { generatedId } from '../../../utils/randomId';
-import * as service from './link.service';
-
+import { handleResponse } from '../../../middleware/requestHandle'
+import { NewLinkDocument } from '../../../models/@types'
+import { deviceModel } from '../../../models/device'
+import { fileModel } from '../../../models/file'
+import { linkModel } from '../../../models/link'
+import { recipientModel } from '../../../models/recipient'
+import { uploadModel } from '../../../models/upload'
+import { invalidException } from '../../../utils/apiErrorHandler'
+import {
+  generateHMACKey,
+  generateRegistrationLink,
+} from '../../../utils/crypto'
+import { getCurrentJST } from '../../../utils/day'
+import { generatedId } from '../../../utils/randomId'
+import * as service from './link.service'
 
 // export const downloadKLink = async () => {}
 
@@ -170,6 +170,11 @@ export const checkRegisterLink = async (
     const link = await linkModel.getOne({ linkId })
 
     if (!link) throw invalidException('link is not found', '4018')
+    const recipient = await recipientModel.getByFieldAndValue(
+      'recipientId',
+      link.recipientId,
+    )
+    if (!recipient) throw invalidException('recipient not found', '4015')
 
     if (link.uploadId) {
       const device = await deviceModel.getByFieldAndValue(
@@ -178,7 +183,11 @@ export const checkRegisterLink = async (
       )
       if (!device) throw invalidException('device is not found', '4020')
     }
-    return handleResponse(res, 200, { isRegistration: link.isRegistration })
+
+    return handleResponse(res, 200, {
+      isRegistration: link.isRegistration,
+      recipientName: recipient.name,
+    })
   } catch (error) {
     next(error)
   }
