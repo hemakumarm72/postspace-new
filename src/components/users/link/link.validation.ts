@@ -11,7 +11,7 @@ export const CREATE_REGISTRATION_LINK: Schema = {
   recipientId: VALIDATION_RECIPIENT_ID('body'),
 }
 
-export const CREATE_LINK: Schema = {
+export const CHECK_LINK_ID: Schema = {
   linkId: VALIDATION_LINK_ID('params'),
 }
 
