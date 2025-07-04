@@ -37,6 +37,7 @@ export const createRecipientLink = async (
 
     if (isExiting)
       return handleResponse(res, 200, {
+        isRegistration: isExiting.isRegistration,
         linkId: isExiting.linkId,
         linkKey: isExiting.linkKey,
       })
@@ -58,6 +59,7 @@ export const createRecipientLink = async (
     return handleResponse(res, 200, {
       linkId: create.linkId,
       linkKey: create.linkKey,
+      isRegistration: create.isRegistration,
     })
   } catch (error) {
     next(error)
@@ -152,6 +154,7 @@ export const regeneratedRecipientLink = async (
     await service.createRegistrationLink(create)
 
     return handleResponse(res, 200, {
+      isRegistration: create.isRegistration,
       linkId: create.linkId,
       linkKey: create.linkKey,
     })

@@ -1,6 +1,6 @@
 import { Location, ParamSchema } from 'express-validator'
 
-import { UpdateType, UserDocument } from '../models/@types'
+import { UpdateType, UploadDocument, UserDocument } from '../models/@types'
 import { deviceModel } from '../models/device'
 import { linkModel } from '../models/link'
 import { otpModel } from '../models/otp'
@@ -341,12 +341,11 @@ export const VALIDATION_LINK = (where: Location): ParamSchema => ({
       if (!recipient) throw Error('4015')
       const query = {} as any
       query.recipientId = recipient?.recipientId
-
+      let files = [] as UploadDocument[]
       if (get.uploadId) {
         query.uploadId = get?.uploadId
+        files = await uploadModel.get(query)
       }
-
-      const files = await uploadModel.get(query)
 
       req.link = get
       req.recipient = recipient
