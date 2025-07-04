@@ -182,6 +182,10 @@ export const checkRegisterLink = async (
         link.recipientId,
       )
       if (!device) throw invalidException('device is not found', '4020')
+      return handleResponse(res, 200, {
+        isRegistration: false,
+        recipientName: recipient.name,
+      })
     }
 
     return handleResponse(res, 200, {
